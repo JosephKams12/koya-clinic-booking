@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koya Clinic | Appointment Booking</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f8f7;
+      color: #18332d;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #ffffff;
+      padding: 20px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e5eeeb;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      color: #087b60;
+    }
+
+    .logo span {
+      color: #18332d;
+    }
+
+    .header-tag {
+      color: #647871;
+      font-size: 13px;
+    }
+
+    .hero {
+      background: linear-gradient(120deg, #087b60, #075b4b);
+      color: white;
+      padding: 65px 7%;
+    }
+
+    .hero-content {
+      max-width: 720px;
+    }
+
+    .hero-label {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      padding: 7px 13px;
+      border-radius: 30px;
+      font-size: 12px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      color: #e1f3ed;
+      max-width: 550px;
+      font-size: 16px;
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 45px auto;
+      padding: 0 22px;
+    }
+
+    .section-heading {
+      margin-bottom: 25px;
+    }
+
+    .section-heading h2 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .section-heading p {
+      color: #71827c;
+      font-size: 14px;
+    }
+
+    .settings {
+      background: white;
+      border: 1px solid #e3ece8;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 30px;
+    }
+
+    .settings label {
+      font-size: 13px;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #dce6e1;
+      border-radius: 8px;
+      outline: none;
+      font-size: 14px;
+      background: white;
+    }
+
+    input:focus {
+      border-color: #087b60;
+    }
+
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .slot-card {
+      background: white;
+      border: 1px solid #e4ece8;
+      border-radius: 13px;
+      padding: 22px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .slot-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(20, 60, 45, .07);
+    }
+
+    .doctor-icon {
+      width: 45px;
+      height: 45px;
+      background: #e7f5ef;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .doctor-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .slot-detail {
+      color: #6c7d76;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+
+    .availability {
+      display: inline-block;
+      color: #087b60;
+      background: #e8f7ef;
+      border-radius: 20px;
+      padding: 5px 11px;
+      font-size: 11px;
+      font-weight: 700;
+      margin: 15px 0;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: background .2s;
+    }
+
+    .book-btn {
+      width: 100%;
+      background: #087b60;
+      color: white;
+    }
+
+    .book-btn:hover {
+      background: #065c49;
+    }
+
+    .book-btn:disabled {
+      background: #b5c5bf;
+      cursor: not-allowed;
+    }
+
+    .refresh-btn {
+      background: #e8f5ef;
+      color: #087b60;
+      margin-bottom: 20px;
+    }
+
+    .booking-panel {
+      display: none;
+      background: white;
+      border: 1px solid #e2ece7;
+      border-radius: 13px;
+      padding: 25px;
+      margin-top: 35px;
+      max-width: 600px;
+    }
+
+    .booking-panel h3 {
+      font-size: 21px;
+      margin-bottom: 7px;
+    }
+
+    .booking-panel p {
+      color: #71827c;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .confirm-btn {
+      background: #087b60;
+      color: white;
+      flex: 1;
+    }
+
+    .cancel-btn {
+      background: #edf2ef;
+      color: #43584f;
+    }
+
+    .message {
+      padding: 13px;
+      border-radius: 8px;
+      margin-top: 18px;
+      font-size: 14px;
+      display: none;
+      overflow-wrap: anywhere;
+    }
+
+    .success {
+      display: block;
+      background: #e8f7ee;
+      color: #126b42;
+    }
+
+    .error {
+      display: block;
+      background: #fff0ed;
+      color: #b13c2d;
+    }
+
+    .empty {
+      background: white;
+      padding: 35px;
+      text-align: center;
+      border-radius: 12px;
+      color: #71827c;
+      grid-column: 1 / -1;
+    }
+
+    footer {
+      margin-top: 70px;
+      background: #173b32;
+      color: #d8e9e2;
+      text-align: center;
+      padding: 25px;
+      font-size: 13px;
+    }
+
+    @media(max-width: 600px) {
+      header {
+        padding: 17px 5%;
+      }
+
+      .hero {
+        padding: 50px 6%;
+      }
+
+      main {
+        margin-top: 30px;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">KOYA <span>CLINIC</span></div>
+    <div class="header-tag">Patient Appointment Portal</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-label">YOUR HEALTH, OUR PRIORITY</div>
+      <h1>Book Your Appointment With Ease</h1>
+      <p>
+        Choose a convenient appointment with one of our healthcare
+        providers. View available times and secure your booking online.
+      </p>
+    </div>
+  </section>
+
+  <main>
+
+    <div class="section-heading">
+      <h2>Available Appointments</h2>
+      <p>Browse available appointment slots and select the one that works for you.</p>
+    </div>
+
+    <div class="settings">
+      <label for="apiKey">API Access Key</label>
+      <input
+        type="password"
+        id="apiKey"
+        placeholder="Enter your clinic API key"
+        autocomplete="off"
+      >
+    </div>
+
+    <button class="refresh-btn" onclick="loadSlots()">
+      ↻ Refresh Appointments
+    </button>
+
+    <div class="slots-grid" id="slots">
+      <div class="empty">Enter your API key to load available appointments.</div>
+    </div>
+
+    <section class="booking-panel" id="bookingPanel">
+      <h3>Complete Your Booking</h3>
+      <p id="selectedSlot">Selected appointment</p>
+
+      <form id="bookingForm">
+        <div class="form-group">
+          <label for="patientName">Full Name</label>
+          <input
+            id="patientName"
+            type="text"
+            placeholder="Enter your full name"
+            minlength="2"
+            maxlength="100"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="patientEmail">Email Address</label>
+          <input
+            id="patientEmail"
+            type="email"
+            placeholder="Enter your email address"
+            required
+          >
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="confirm-btn" id="confirmBtn">
+            Confirm Appointment
+          </button>
+
+          <button
+            type="button"
+            class="cancel-btn"
+            onclick="closeBooking()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <div class="message" id="bookingMessage"></div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Koya Clinic. Your health and wellbeing matter to us.
+  </footer>
+
+  <script>
+    const API_BASE = window.location.origin;
+
+    let selectedSlotId = null;
+
+    function getApiKey() {
+      return document.getElementById("apiKey").value.trim();
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+
+      return date.toLocaleDateString("en-NG", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "Africa/Lagos"
+      });
+    }
+
+    function formatTime(value) {
+      return new Date(value).toLocaleTimeString("en-NG", {
+        hour: "numeric",
+        minute: "2-digit",
+        timeZone: "Africa/Lagos"
+      });
+    }
+
+    function showMessage(message, type) {
+      const element = document.getElementById("bookingMessage");
+
+      element.textContent = message;
+      element.className = "message " + type;
+    }
+
+    async function loadSlots() {
+      const apiKey = getApiKey();
+      const container = document.getElementById("slots");
+
+      if (!apiKey) {
+        container.innerHTML =
+          '<div class="empty">Please enter your API key first.</div>';
+        return;
+      }
+
+      container.innerHTML =
+        '<div class="empty">Loading available appointments...</div>';
+
+      try {
+        const response = await fetch(`${API_BASE}/slots`, {
+          headers: {
+            "X-API-Key": apiKey
+          }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Unable to load appointments.");
+        }
+
+        const availableSlots = data.slots.filter(slot => slot.available);
+
+        if (availableSlots.length === 0) {
+          container.innerHTML =
+            '<div class="empty">There are currently no available appointments. Please check again later.</div>';
+          return;
+        }
+
+        container.innerHTML = availableSlots.map(slot => `
+          <article class="slot-card">
+            <div class="doctor-icon">✚</div>
+
+            <div class="doctor-name">${escapeHtml(slot.provider)}</div>
+
+            <div class="slot-detail">📅 ${formatDate(slot.start)}</div>
+
+            <div class="slot-detail">
+              🕒 ${formatTime(slot.start)} – ${formatTime(slot.end)}
+            </div>
+
+            <div class="availability">AVAILABLE</div>
+
+            <button
+              class="book-btn"
+              onclick="openBooking('${escapeHtml(slot.id)}', '${escapeHtml(slot.provider)}', '${escapeHtml(slot.start)}')"
+            >
+              Book Appointment
+            </button>
+          </article>
+        `).join("");
+
+      } catch (error) {
+        container.innerHTML =
+          `<div class="empty">${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+    }
+
+    function openBooking(slotId, provider, start) {
+      selectedSlotId = slotId;
+
+      document.getElementById("selectedSlot").textContent =
+        `${provider} — ${formatDate(start)} at ${formatTime(start)}`;
+
+      document.getElementById("bookingPanel").style.display = "block";
+
+      document.getElementById("bookingMessage").className = "message";
+
+      document.getElementById("bookingPanel").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+
+    function closeBooking() {
+      document.getElementById("bookingPanel").style.display = "none";
+      selectedSlotId = null;
+    }
+
+    document.getElementById("bookingForm").addEventListener(
+      "submit",
+      async function(event) {
+        event.preventDefault();
+
+        const apiKey = getApiKey();
+        const button = document.getElementById("confirmBtn");
+
+        if (!selectedSlotId) {
+          showMessage("Please select an appointment.", "error");
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Processing...";
+
+        try {
+          const response = await fetch(`${API_BASE}/bookings`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-API-Key": apiKey,
+              "Idempotency-Key": crypto.randomUUID()
+            },
+            body: JSON.stringify({
+              slot_id: selectedSlotId,
+              name: document.getElementById("patientName").value.trim(),
+              email: document.getElementById("patientEmail").value.trim()
+            })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "Booking could not be completed.");
+          }
+
+          showMessage(
+            `Appointment confirmed! Your booking reference is ${data.id}. Please keep this reference.`,
+            "success"
+          );
+
+          document.getElementById("bookingForm").reset();
+
+          selectedSlotId = null;
+
+          await loadSlots();
+
+        } catch (error) {
+          showMessage(error.message, "error");
+        } finally {
+          button.disabled = false;
+          button.textContent = "Confirm Appointment";
+        }
+      }
+    );
+  </script>
+
+</body>
+</html>
