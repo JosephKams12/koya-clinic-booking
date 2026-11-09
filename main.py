@@ -183,8 +183,9 @@ def reset_slots(data: ResetRequest, db: Session = Depends(get_db)):
         db.commit()
         return {"message": "Done"}
 
-    except Exception:
+    except Exception as exc:
         db.rollback()
+        print("RESET ERROR:", repr(exc))
         raise HTTPException(status_code=400, detail="could not reset slots")
 
 
